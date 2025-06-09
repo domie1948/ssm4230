@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.FuzerenDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.username as username
+        ,a.password as password
+        ,a.fuzeren_name as fuzerenName
+        ,a.fuzeren_phone as fuzerenPhone
+        ,a.fuzeren_id_number as fuzerenIdNumber
+        ,a.fuzeren_photo as fuzerenPhoto
+        ,a.sex_types as sexTypes
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.FuzerenView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM fuzeren  a
+
+        <where>
+            <if test=" params.username != '' and params.username != null and params.username != 'null' ">
+                and a.username like CONCAT('%',#{params.username},'%')
+            </if>
+            <if test=" params.password != '' and params.password != null and params.password != 'null' ">
+                and a.password like CONCAT('%',#{params.password},'%')
+            </if>
+            <if test=" params.fuzerenName != '' and params.fuzerenName != null and params.fuzerenName != 'null' ">
+                and a.fuzeren_name like CONCAT('%',#{params.fuzerenName},'%')
+            </if>
+            <if test=" params.fuzerenPhone != '' and params.fuzerenPhone != null and params.fuzerenPhone != 'null' ">
+                and a.fuzeren_phone like CONCAT('%',#{params.fuzerenPhone},'%')
+            </if>
+            <if test=" params.fuzerenIdNumber != '' and params.fuzerenIdNumber != null and params.fuzerenIdNumber != 'null' ">
+                and a.fuzeren_id_number like CONCAT('%',#{params.fuzerenIdNumber},'%')
+            </if>
+            <if test="params.sexTypes != null">
+                and a.sex_types = #{params.sexTypes}
+            </if>
+
+        </where>
+        order by a.${params.orderBy} desc
+    </select>
+
+</mapper>
